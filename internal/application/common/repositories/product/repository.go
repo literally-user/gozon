@@ -2,7 +2,7 @@ package product
 
 import (
 	"github.com/google/uuid"
-	"github.com/literally_user/gozon/internals/domain/product"
+	"github.com/literally_user/gozon/internal/domain/product"
 )
 
 type Repository interface {

@@ -2,7 +2,7 @@ package order
 
 import (
 	"github.com/google/uuid"
-	"github.com/literally_user/gozon/internals/domain/order"
+	"github.com/literally_user/gozon/internal/domain/order"
 )
 
 type Repository interface {

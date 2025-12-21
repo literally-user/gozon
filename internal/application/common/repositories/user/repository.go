@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/literally_user/gozon/internals/domain/user"
+	"github.com/literally_user/gozon/internal/domain/user"
 
 	"github.com/google/uuid"
 )

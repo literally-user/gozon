@@ -1,8 +1,8 @@
 package user
 
 import (
-	application "github.com/literally_user/gozon/internals/application/common/repositories/user"
-	domain "github.com/literally_user/gozon/internals/domain/user"
+	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
+	domain "github.com/literally_user/gozon/internal/domain/user"
 )
 
 type CreateUserInteractor struct {

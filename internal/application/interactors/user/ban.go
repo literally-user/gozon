@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/google/uuid"
-	application "github.com/literally_user/gozon/internals/application/common/repositories/user"
+	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
 )
 
 type BanUserInteractor struct {
@@ -35,4 +35,3 @@ func (i *BanUserInteractor) Execute(callerUserUUID uuid.UUID, targetUserUUID uui
 
 	return nil
 }
-

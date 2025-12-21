@@ -3,12 +3,12 @@ package order
 import (
 	"github.com/google/uuid"
 
-	applicationProduct "github.com/literally_user/gozon/internals/application/interactors/product"
-	applicationUser "github.com/literally_user/gozon/internals/application/interactors/user"
+	applicationProduct "github.com/literally_user/gozon/internal/application/interactors/product"
+	applicationUser "github.com/literally_user/gozon/internal/application/interactors/user"
 
-	repositoryOrder "github.com/literally_user/gozon/internals/application/common/repositories/order"
-	repositoryProduct "github.com/literally_user/gozon/internals/application/common/repositories/product"
-	repositoryUser "github.com/literally_user/gozon/internals/application/common/repositories/user"
+	repositoryOrder "github.com/literally_user/gozon/internal/application/common/repositories/order"
+	repositoryProduct "github.com/literally_user/gozon/internal/application/common/repositories/product"
+	repositoryUser "github.com/literally_user/gozon/internal/application/common/repositories/user"
 )
 
 type CreateOrderInteractor struct {

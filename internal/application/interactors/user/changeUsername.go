@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/google/uuid"
-	application "github.com/literally_user/gozon/internals/application/common/repositories/user"
+	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
 )
 
 type ChangeUsernameInteractor struct {
