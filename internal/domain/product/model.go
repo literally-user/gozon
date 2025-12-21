@@ -54,7 +54,7 @@ func (p *Product) ChangeTitle(title string) error {
 
 func (p *Product) ChangeDescription(description string) error {
 	if description == p.Description {
-		return ErrTitleDoesntChanged
+		return ErrDescriptionDoesntChanged
 	}
 
 	p.Description = description
@@ -81,7 +81,7 @@ func (p *Product) ChangePrice(price float64) error {
 
 func (p *Product) ChangeRating(rating float32) error {
 	if rating == p.Rating {
-		return ErrPriceDoesntChanged
+		return ErrRatingDoesntChanged
 	}
 
 	p.Rating = rating
@@ -90,9 +90,27 @@ func (p *Product) ChangeRating(rating float32) error {
 
 func (p *Product) ChangeShadowRating(rating float32) error {
 	if rating == p.ShadowRating {
-		return ErrPriceDoesntChanged
+		return ErrShadowRatingDoesntChanged
 	}
 
 	p.ShadowRating = rating
+	return nil
+}
+
+func (p *Product) MarkAsOutOfStock() error {
+	if p.OutOfStock {
+		return ErrOutOfStockStateDoesntChanged
+	}
+
+	p.OutOfStock = true
+	return nil
+}
+
+func (p *Product) UnmarkAsOutOfStock() error {
+	if !p.OutOfStock {
+		return ErrOutOfStockStateDoesntChanged
+	}
+
+	p.OutOfStock = false
 	return nil
 }
