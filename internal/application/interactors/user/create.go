@@ -1,23 +1,23 @@
 package user
 
 import (
-	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
+	"github.com/literally_user/gozon/internal/application/common/repositories"
 	domain "github.com/literally_user/gozon/internal/domain/user"
 )
 
 type CreateUserInteractor struct {
-	Repository application.Repository
+	Repository repositories.UserRepository
 }
 
-func (i *CreateUserInteractor) Execute(username, password, email string) error {
-	user, err := domain.NewUser(username, password, email)
+func (i *CreateUserInteractor) Execute(username, password, email, phone string) error {
+	user, err := domain.NewUser(username, password, email, phone)
 	if err != nil {
 		return ErrUserNotFound
 	}
 
 	err = i.Repository.CreateUser(user)
 	if err != nil {
-		return ErrUserNotFound
+		return err
 	}
 
 	return nil

@@ -2,11 +2,11 @@ package user
 
 import (
 	"github.com/google/uuid"
-	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
+	"github.com/literally_user/gozon/internal/application/common/repositories"
 )
 
 type DeleteUserInteractor struct {
-	Repository application.Repository
+	Repository repositories.UserRepository
 }
 
 func (i *DeleteUserInteractor) Execute(callerUserUUID, targetUserUUID uuid.UUID) error {

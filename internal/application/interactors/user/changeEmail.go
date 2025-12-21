@@ -2,11 +2,11 @@ package user
 
 import (
 	"github.com/google/uuid"
-	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
+	"github.com/literally_user/gozon/internal/application/common/repositories"
 )
 
 type ChangeEmailInteractor struct {
-	Repository application.Repository
+	Repository repositories.UserRepository
 }
 
 func (i *ChangeEmailInteractor) Execute(uuid uuid.UUID, email string) error {

@@ -17,7 +17,7 @@ func NewProduct(title, description, productType string, price float32) (Product,
 
 	product := Product{
 		UUID:   uuid.New(),
-		Rating: 5.0,
+		Rating: 0.0,
 	}
 
 	err = product.ChangeTitle(title)

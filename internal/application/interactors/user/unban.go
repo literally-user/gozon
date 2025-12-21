@@ -2,11 +2,11 @@ package user
 
 import (
 	"github.com/google/uuid"
-	application "github.com/literally_user/gozon/internal/application/common/repositories/user"
+	repositories "github.com/literally_user/gozon/internal/application/common/repositories"
 )
 
 type UnbanUserInteractor struct {
-	Repository application.Repository
+	Repository repositories.UserRepository
 }
 
 func (i *UnbanUserInteractor) Execute(callerUserUUID uuid.UUID, targetUserUUID uuid.UUID) error {

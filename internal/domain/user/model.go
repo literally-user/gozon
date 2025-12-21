@@ -9,6 +9,7 @@ import (
 type User struct {
 	UUID uuid.UUID
 
+	Phone     string
 	Username  string
 	Password  [32]byte
 	Email     string
@@ -17,7 +18,7 @@ type User struct {
 	Banned bool
 }
 
-func NewUser(username, password, email string) (User, error) {
+func NewUser(username, password, email, phone string) (User, error) {
 	var err error
 
 	user := User{
@@ -41,6 +42,11 @@ func NewUser(username, password, email string) (User, error) {
 		return User{}, err
 	}
 
+	err = user.ChangePhone(phone)
+	if err != nil {
+		return User{}, err
+	}
+
 	return user, nil
 }
 
@@ -50,6 +56,15 @@ func (u *User) ChangeUsername(username string) error {
 	}
 
 	u.Username = username
+	return nil
+}
+
+func (u *User) ChangePhone(phone string) error {
+	if phone == u.Phone {
+		return ErrPhoneDoesntChanged
+	}
+
+	u.Phone = phone
 	return nil
 }
 

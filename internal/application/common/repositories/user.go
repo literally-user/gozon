@@ -1,4 +1,4 @@
-package user
+package repositories
 
 import (
 	"github.com/literally_user/gozon/internal/domain/user"
@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Repository interface {
+type UserRepository interface {
 	GetByUUID(uuid uuid.UUID) (user.User, error)
 	UpdateUser(user user.User) error
 	CreateUser(user user.User) error

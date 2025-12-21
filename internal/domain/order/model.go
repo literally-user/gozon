@@ -4,6 +4,7 @@ import "github.com/google/uuid"
 
 type Order struct {
 	UUID      uuid.UUID
+	Cancelled bool
 	Completed bool
 	Taken     bool
 
@@ -11,27 +12,12 @@ type Order struct {
 	UserUUID    uuid.UUID
 }
 
-func NewOrder(productUuid, userUuid uuid.UUID, completed, taken bool) (Order, error) {
-	var err error
-
+func NewOrder(productUuid, userUuid uuid.UUID) (Order, error) {
 	delivery := Order{
-		UUID:        uuid.New(),
+		UUID: uuid.New(),
+
 		ProductUUID: productUuid,
 		UserUUID:    userUuid,
-	}
-
-	if completed {
-		err = delivery.MarkAsCompleted()
-		if err != nil {
-			return Order{}, err
-		}
-	}
-
-	if taken {
-		err = delivery.MarkAsTaken()
-		if err != nil {
-			return Order{}, err
-		}
 	}
 
 	return delivery, nil
@@ -50,6 +36,22 @@ func (d *Order) UnmarkAsCompleted() error {
 		return ErrCompletedStatusDoesntChanged
 	}
 	d.Completed = false
+	return nil
+}
+
+func (d *Order) MarkAsCancelled() error {
+	if d.Cancelled == true {
+		return ErrCancelledStatusDoesntChanged
+	}
+	d.Cancelled = true
+	return nil
+}
+
+func (d *Order) UnmarkAsCancelled() error {
+	if d.Cancelled == false {
+		return ErrCancelledStatusDoesntChanged
+	}
+	d.Cancelled = false
 	return nil
 }
 
