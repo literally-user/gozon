@@ -17,8 +17,8 @@ type Product struct {
 }
 
 func NewProduct(title, description, productType string, price float64) (Product, error) {
-	var product Product
 	var err error
+	var product Product
 
 	err = product.ChangeTitle(title)
 	if err != nil {

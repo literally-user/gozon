@@ -15,11 +15,18 @@ type Order struct {
 	UserUUID    uuid.UUID
 }
 
-func NewOrder(productUUID, userUUID uuid.UUID) (Order, error) {
-	var order Order
+func NewOrder(address string, productUUID, userUUID uuid.UUID) (Order, error) {
+	order := Order{
+		UUID: uuid.New(),
 
-	order.ProductUUID = productUUID
-	order.UserUUID = userUUID
+		UserUUID:    userUUID,
+		ProductUUID: productUUID,
+	}
+
+	err := order.ChangeAddress(address)
+	if err != nil {
+		return Order{}, err
+	}
 
 	return order, nil
 }

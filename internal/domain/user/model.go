@@ -9,12 +9,26 @@ import (
 type User struct {
 	UUID uuid.UUID
 
-	Password [32]byte
-	Username string
-	Email    string
+	Password  [32]byte
+	Username  string
+	Email     string
+	Telephone string
 
 	Privileges int
 	Banned     bool
+}
+
+func NewUser(username, password, email, telephone string) (User, error) {
+
+}
+
+func (u *User) ChangeTelephone(telephone string) error {
+	if telephone == u.Telephone {
+		return ErrTelephoneDoesntChanged
+	}
+
+	u.Telephone = telephone
+	return nil
 }
 
 func (u *User) ChangeUsername(username string) error {
