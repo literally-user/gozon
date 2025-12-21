@@ -3,70 +3,86 @@ package order
 import "github.com/google/uuid"
 
 type Order struct {
-	UUID      uuid.UUID
-	Cancelled bool
+	UUID uuid.UUID
+
+	Address string
+
 	Completed bool
+	Canceled  bool
 	Taken     bool
 
 	ProductUUID uuid.UUID
 	UserUUID    uuid.UUID
 }
 
-func NewOrder(productUuid, userUuid uuid.UUID) (Order, error) {
-	delivery := Order{
-		UUID: uuid.New(),
+func NewOrder(productUUID, userUUID uuid.UUID) (Order, error) {
+	var order Order
 
-		ProductUUID: productUuid,
-		UserUUID:    userUuid,
-	}
+	order.ProductUUID = productUUID
+	order.UserUUID = userUUID
 
-	return delivery, nil
+	return order, nil
 }
 
-func (d *Order) MarkAsCompleted() error {
-	if d.Completed == true {
-		return ErrCompletedStatusDoesntChanged
+func (o *Order) ChangeAddress(address string) error {
+	if o.Address == address {
+		return ErrAddressDoesntChanged
 	}
-	d.Completed = true
+
+	o.Address = address
 	return nil
 }
 
-func (d *Order) UnmarkAsCompleted() error {
-	if d.Completed == false {
-		return ErrCompletedStatusDoesntChanged
+func (o *Order) MarkAsCompleted() error {
+	if o.Completed {
+		return ErrCompletedStateDoesntChanged
 	}
-	d.Completed = false
+
+	o.Completed = true
 	return nil
 }
 
-func (d *Order) MarkAsCancelled() error {
-	if d.Cancelled == true {
-		return ErrCancelledStatusDoesntChanged
+func (o *Order) UnmarkAsCompleted() error {
+	if !o.Completed {
+		return ErrCompletedStateDoesntChanged
 	}
-	d.Cancelled = true
+
+	o.Completed = false
 	return nil
 }
 
-func (d *Order) UnmarkAsCancelled() error {
-	if d.Cancelled == false {
-		return ErrCancelledStatusDoesntChanged
+func (o *Order) MarkAsCanceled() error {
+	if o.Canceled {
+		return ErrCompletedStateDoesntChanged
 	}
-	d.Cancelled = false
+
+	o.Canceled = true
 	return nil
 }
 
-func (d *Order) MarkAsTaken() error {
-	if d.Taken == true {
-		return ErrTakenStatusDoesntChanged
+func (o *Order) UnmarkAsCanceled() error {
+	if !o.Canceled {
+		return ErrCanceledStateDoesntChanged
 	}
-	d.Taken = true
+
+	o.Canceled = false
 	return nil
 }
 
-func (d *Order) UnmarkAsTaken() error {
-	if d.Taken == false {
-		return ErrTakenStatusDoesntChanged
+func (o *Order) MarkAsTaken() error {
+	if o.Taken {
+		return ErrTakenStateDoesntChanged
 	}
-	d.Taken = false
+
+	o.Taken = true
+	return nil
+}
+
+func (o *Order) UnmarkAsTaken() error {
+	if !o.Taken {
+		return ErrTakenStateDoesntChanged
+	}
+
+	o.Taken = false
 	return nil
 }

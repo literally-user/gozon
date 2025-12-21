@@ -2,6 +2,7 @@ package order
 
 import "errors"
 
-var ErrCompletedStatusDoesntChanged error = errors.New("delivered status doesn't changed")
-var ErrCancelledStatusDoesntChanged error = errors.New("cancelled status doesn't changed")
-var ErrTakenStatusDoesntChanged error = errors.New("taken status doesn't changed")
+var ErrCompletedStateDoesntChanged = errors.New("completed state doesn't changed")
+var ErrCanceledStateDoesntChanged = errors.New("canceled state doesn't changed")
+var ErrTakenStateDoesntChanged = errors.New("taken state doesn't changed")
+var ErrAddressDoesntChanged = errors.New("address destination doesn't changed")
