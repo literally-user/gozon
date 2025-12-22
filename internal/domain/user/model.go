@@ -19,7 +19,30 @@ type User struct {
 }
 
 func NewUser(username, password, email, telephone string) (User, error) {
+	var err error
+	var user User
 
+	err = user.ChangeUsername(username)
+	if err != nil {
+		return User{}, err
+	}
+
+	err = user.ChangePassword(password)
+	if err != nil {
+		return User{}, err
+	}
+
+	err = user.ChangeEmail(email)
+	if err != nil {
+		return User{}, err
+	}
+
+	err = user.ChangeTelephone(telephone)
+	if err != nil {
+		return User{}, err
+	}
+
+	return user, nil
 }
 
 func (u *User) ChangeTelephone(telephone string) error {
