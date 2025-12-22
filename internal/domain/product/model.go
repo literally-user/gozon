@@ -105,3 +105,15 @@ func (p *Product) ChangeCount(count int) error {
 	p.Count = count
 	return nil
 }
+
+func (p *Product) GetCount() int {
+	return p.Count
+}
+
+func (p *Product) GetShadowRating() float32 {
+	return p.ShadowRating
+}
+
+func (p *Product) GetRating() float32 {
+	return p.Rating
+}

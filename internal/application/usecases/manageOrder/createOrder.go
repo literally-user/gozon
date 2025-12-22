@@ -38,7 +38,7 @@ func (i *CreateOrderInteractor) Execute(orderDTO DTO) error {
 		return err
 	}
 
-	err = product.ChangeCount(product.Count - 1)
+	err = product.ChangeCount(product.GetCount() - 1)
 	if err != nil {
 		return err
 	}
