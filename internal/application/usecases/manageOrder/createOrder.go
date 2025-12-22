@@ -1,5 +1,7 @@
 package manageOrder
 
+// TODO: Доделать юзкейс заказов
+
 import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/bank"
