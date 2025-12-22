@@ -1,4 +1,4 @@
-package manageUser
+package errors
 
 import "errors"
 

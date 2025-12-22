@@ -3,7 +3,7 @@ package manageCart
 import (
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	productApplication "github.com/literally_user/gozon/internal/application/usecases/manageProduct"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 	"github.com/literally_user/gozon/internal/domain/cartItem"
 )
 
@@ -26,7 +26,7 @@ func (i *AddToCartInteractor) Execute(cartItemDTO DTO) error {
 
 	product, err := i.ProductRepository.GetByUUID(cartItemDTO.ProductUUID)
 	if err != nil {
-		return productApplication.ErrProductNotFound
+		return applicationErrors.ErrProductNotFound
 	}
 
 	err = product.ChangeShadowRating(product.ShadowRating + 0.1)

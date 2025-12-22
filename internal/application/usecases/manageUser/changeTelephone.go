@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeTelephoneInteractor struct {
@@ -14,7 +15,7 @@ type ChangeTelephoneInteractor struct {
 func (i *ChangeTelephoneInteractor) Execute(uuid uuid.UUID, telephone string) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return ErrUserNotFound
+		return applicationErrors.ErrUserNotFound
 	}
 
 	oldTelephone := user.Telephone

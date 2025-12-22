@@ -1,4 +1,4 @@
-package manageCart
+package errors
 
 import "errors"
 

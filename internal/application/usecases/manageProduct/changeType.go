@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeProductTypeInteractor struct {
@@ -14,7 +15,7 @@ type ChangeProductTypeInteractor struct {
 func (i *ChangeProductTypeInteractor) Execute(uuid uuid.UUID, productType string) error {
 	product, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return ErrProductNotFound
+		return applicationErrors.ErrProductNotFound
 	}
 
 	oldType := product.Type

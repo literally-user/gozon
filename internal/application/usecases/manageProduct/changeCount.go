@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeProductCountInteractor struct {
@@ -14,7 +15,7 @@ type ChangeProductCountInteractor struct {
 func (i *ChangeProductCountInteractor) Execute(uuid uuid.UUID, count int) error {
 	product, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return ErrProductNotFound
+		return applicationErrors.ErrProductNotFound
 	}
 
 	oldCount := product.Count

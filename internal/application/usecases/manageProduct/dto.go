@@ -1,8 +1,8 @@
 package manageProduct
 
 type DTO struct {
-	title       string
-	description string
-	productType string
-	price       float64
+	Title       string
+	Description string
+	ProductType string
+	Price       float64
 }

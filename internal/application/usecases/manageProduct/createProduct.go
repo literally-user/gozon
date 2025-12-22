@@ -12,7 +12,7 @@ type CreateProductInteractor struct {
 }
 
 func (i *CreateProductInteractor) Execute(productDTO DTO) error {
-	newProduct, err := product.NewProduct(productDTO.title, productDTO.description, productDTO.productType, productDTO.price)
+	newProduct, err := product.NewProduct(productDTO.Title, productDTO.Description, productDTO.ProductType, productDTO.Price)
 	if err != nil {
 		return err
 	}

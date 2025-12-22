@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangePasswordInteractor struct {
@@ -16,7 +17,7 @@ type ChangePasswordInteractor struct {
 func (i *ChangePasswordInteractor) Execute(uuid uuid.UUID, password string) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return ErrUserNotFound
+		return applicationErrors.ErrUserNotFound
 	}
 
 	oldPassword := user.Password

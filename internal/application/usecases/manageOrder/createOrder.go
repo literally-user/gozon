@@ -1,15 +1,10 @@
 package manageOrder
 
-// TODO: Доделать юзкейс заказов
-
 import (
-	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/bank"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	cartItemApplication "github.com/literally_user/gozon/internal/application/usecases/manageCart"
-	productApplication "github.com/literally_user/gozon/internal/application/usecases/manageProduct"
-	userApplication "github.com/literally_user/gozon/internal/application/usecases/manageUser"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 	domainOrder "github.com/literally_user/gozon/internal/domain/order"
 )
 
@@ -24,18 +19,18 @@ type CreateOrderInteractor struct {
 	BankAdapterFactory bank.AdapterFactory
 }
 
-func (i *CreateOrderInteractor) Execute(userUUID, cartItemUUID uuid.UUID, address string, card bank.Card, bankName string) error {
-	user, err := i.UserRepository.GetByUUID(userUUID)
+func (i *CreateOrderInteractor) Execute(orderDTO DTO) error {
+	user, err := i.UserRepository.GetByUUID(orderDTO.UserUUID)
 	if err != nil {
-		return userApplication.ErrUserNotFound
+		return applicationErrors.ErrUserNotFound
 	}
-	cartItem, err := i.CartItemRepository.GetByUUID(cartItemUUID)
+	cartItem, err := i.CartItemRepository.GetByUUID(orderDTO.CartItemUUID)
 	if err != nil {
-		return cartItemApplication.ErrCartItemNotFound
+		return applicationErrors.ErrCartItemNotFound
 	}
 	product, err := i.ProductRepository.GetByUUID(cartItem.ProductUUID)
 	if err != nil {
-		return productApplication.ErrProductNotFound
+		return applicationErrors.ErrProductNotFound
 	}
 
 	err = i.CartItemRepository.Remove(cartItem)
@@ -53,17 +48,17 @@ func (i *CreateOrderInteractor) Execute(userUUID, cartItemUUID uuid.UUID, addres
 		return err
 	}
 
-	bankAdapter, err := i.BankAdapterFactory.GetBankAdapter(bankName)
+	bankAdapter, err := i.BankAdapterFactory.GetBankAdapter(orderDTO.BankName)
+	if err != nil {
+		return applicationErrors.ErrBankNotFound
+	}
+
+	err = bankAdapter.Refund(orderDTO.Card)
 	if err != nil {
 		return err
 	}
 
-	err = bankAdapter.Refund(card)
-	if err != nil {
-		return err
-	}
-
-	order, err := domainOrder.NewOrder(address, product.UUID, user.UUID)
+	order, err := domainOrder.NewOrder(orderDTO.Address, product.UUID, user.UUID)
 	if err != nil {
 		return err
 	}

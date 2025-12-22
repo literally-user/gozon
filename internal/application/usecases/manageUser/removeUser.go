@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type DeleteUserInteractor struct {
@@ -14,7 +15,7 @@ type DeleteUserInteractor struct {
 func (i *DeleteUserInteractor) Execute(uuid uuid.UUID) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return ErrUserNotFound
+		return applicationErrors.ErrUserNotFound
 	}
 
 	err = i.Repository.Remove(user)

@@ -1,4 +1,4 @@
-package manageProduct
+package errors
 
 import "errors"
 

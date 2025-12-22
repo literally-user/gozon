@@ -1,4 +1,4 @@
-package manageOrder
+package errors
 
 import "errors"
 
