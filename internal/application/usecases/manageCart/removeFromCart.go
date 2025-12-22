@@ -4,20 +4,37 @@ import (
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	applicationProduct "github.com/literally_user/gozon/internal/application/usecases/manageProduct"
 )
 
 type RemoveFromCartInteractor struct {
-	Repository repositories.CartItemRepository
-	Publisher  publisher.Publisher
+	CartItemRepository repositories.CartItemRepository
+	ProductRepository  repositories.ProductRepository
+	Publisher          publisher.Publisher
 }
 
 func (i *RemoveFromCartInteractor) Execute(uuid uuid.UUID) error {
-	cartItem, err := i.Repository.GetByUUID(uuid)
+	cartItem, err := i.CartItemRepository.GetByUUID(uuid)
+	if err != nil {
+		return ErrCartItemNotFound
+	}
+
+	err = i.CartItemRepository.Remove(cartItem)
 	if err != nil {
 		return err
 	}
 
-	err = i.Repository.Remove(cartItem)
+	product, err := i.ProductRepository.GetByUUID(cartItem.ProductUUID)
+	if err != nil {
+		return applicationProduct.ErrProductNotFound
+	}
+
+	err = product.ChangeShadowRating(product.ShadowRating - 0.1)
+	if err != nil {
+		return err
+	}
+
+	err = i.ProductRepository.Update(product)
 	if err != nil {
 		return err
 	}

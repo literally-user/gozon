@@ -1,24 +1,40 @@
 package manageCart
 
 import (
-	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
+	productApplication "github.com/literally_user/gozon/internal/application/usecases/manageProduct"
 	"github.com/literally_user/gozon/internal/domain/cartItem"
 )
 
 type AddToCartInteractor struct {
-	Repository repositories.CartItemRepository
-	Publisher  publisher.Publisher
+	CartItemRepository repositories.CartItemRepository
+	ProductRepository  repositories.ProductRepository
+	Publisher          publisher.Publisher
 }
 
-func (i *AddToCartInteractor) Execute(userUUID, product uuid.UUID) error {
-	newCartItem, err := cartItem.NewCartItem(userUUID, product)
+func (i *AddToCartInteractor) Execute(cartItemDTO DTO) error {
+	newCartItem, err := cartItem.NewCartItem(cartItemDTO.UserUUID, cartItemDTO.ProductUUID)
 	if err != nil {
 		return err
 	}
 
-	err = i.Repository.Create(newCartItem)
+	err = i.CartItemRepository.Create(newCartItem)
+	if err != nil {
+		return err
+	}
+
+	product, err := i.ProductRepository.GetByUUID(cartItemDTO.ProductUUID)
+	if err != nil {
+		return productApplication.ErrProductNotFound
+	}
+
+	err = product.ChangeShadowRating(product.ShadowRating + 0.1)
+	if err != nil {
+		return err
+	}
+
+	err = i.ProductRepository.Update(product)
 	if err != nil {
 		return err
 	}

@@ -3,16 +3,16 @@ package cartItem
 import "github.com/google/uuid"
 
 type CartItem struct {
-	uuid uuid.UUID
+	UUID uuid.UUID
 
-	userUUID    uuid.UUID
-	productUUID uuid.UUID
+	UserUUID    uuid.UUID
+	ProductUUID uuid.UUID
 }
 
 func NewCartItem(userUUID, productUUID uuid.UUID) (CartItem, error) {
 	return CartItem{
-		uuid:        uuid.New(),
-		userUUID:    userUUID,
-		productUUID: productUUID,
+		UUID:        uuid.New(),
+		UserUUID:    userUUID,
+		ProductUUID: productUUID,
 	}, nil
 }
