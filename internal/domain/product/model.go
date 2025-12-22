@@ -9,8 +9,8 @@ type Product struct {
 	Description string
 	Type        string
 
-	OutOfStock bool
-	Price      float64
+	Count int
+	Price float64
 
 	Rating       float32
 	ShadowRating float32
@@ -97,20 +97,11 @@ func (p *Product) ChangeShadowRating(rating float32) error {
 	return nil
 }
 
-func (p *Product) MarkAsOutOfStock() error {
-	if p.OutOfStock {
-		return ErrOutOfStockStateDoesntChanged
+func (p *Product) ChangeCount(count int) error {
+	if count == p.Count {
+		return ErrCountDoesntChanged
 	}
 
-	p.OutOfStock = true
-	return nil
-}
-
-func (p *Product) UnmarkAsOutOfStock() error {
-	if !p.OutOfStock {
-		return ErrOutOfStockStateDoesntChanged
-	}
-
-	p.OutOfStock = false
+	p.Count = count
 	return nil
 }

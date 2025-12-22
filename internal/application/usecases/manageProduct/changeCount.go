@@ -6,33 +6,29 @@ import (
 	"github.com/literally_user/gozon/internal/application/common/repositories"
 )
 
-type UnmarkProductAsOutOfStockInteractor struct {
+type ChangeProductCountInteractor struct {
 	Repository repositories.ProductRepository
 	Publisher  publisher.Publisher
 }
 
-func (i *UnmarkProductAsOutOfStockInteractor) Execute(uuid uuid.UUID) error {
+func (i *ChangeProductCountInteractor) Execute(uuid uuid.UUID, count int) error {
 	product, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
 		return ErrProductNotFound
 	}
 
-	err = product.UnmarkAsOutOfStock()
+	oldCount := product.Count
+
+	err = product.ChangeCount(count)
 	if err != nil {
 		return err
 	}
 
-	err = i.Repository.Update(product)
-	if err != nil {
-		return err
-	}
-
-	err = i.Publisher.Publish(publisher.ProductUnmarkOutOfStockEvent{
-		UUID: product.UUID,
+	err = i.Publisher.Publish(publisher.ProductChangedCountEvent{
+		UUID:     uuid,
+		OldCount: oldCount,
+		NewCount: count,
 	})
-	if err != nil {
-		return err
-	}
 
 	return nil
 }

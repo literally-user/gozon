@@ -51,20 +51,14 @@ func (ProductChangedPriceEvent) Name() string {
 	return "change.product.price"
 }
 
-type ProductMarkOutOfStockEvent struct {
-	UUID uuid.UUID
+type ProductChangedCountEvent struct {
+	UUID     uuid.UUID
+	OldCount int
+	NewCount int
 }
 
-func (ProductMarkOutOfStockEvent) Name() string {
-	return "change.product.mark_out_of_stock"
-}
-
-type ProductUnmarkOutOfStockEvent struct {
-	UUID uuid.UUID
-}
-
-func (ProductUnmarkOutOfStockEvent) Name() string {
-	return "change.product.unmark_out_of_stock"
+func (ProductChangedCountEvent) Name() string {
+	return "change.product.count"
 }
 
 type ProductChangedRatingEvent struct {
