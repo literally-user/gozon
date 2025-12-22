@@ -14,3 +14,13 @@ type OrderCreatedEvent struct {
 func (OrderCreatedEvent) Name() string {
 	return "create.order"
 }
+
+type OrderCanceledEvent struct {
+	Order       order.Order
+	UserUUID    uuid.UUID
+	ProductUUID uuid.UUID
+}
+
+func (OrderCanceledEvent) Name() string {
+	return "cancel.order"
+}
