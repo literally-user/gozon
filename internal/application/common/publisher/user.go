@@ -10,7 +10,7 @@ type UserCreatedEvent struct {
 }
 
 func (UserCreatedEvent) Name() string {
-	return "user.created"
+	return "create.user"
 }
 
 type UserRemovedEvent struct {
@@ -18,7 +18,7 @@ type UserRemovedEvent struct {
 }
 
 func (UserRemovedEvent) Name() string {
-	return "user.removed"
+	return "remove.user"
 }
 
 type UserChangedUsernameEvent struct {
@@ -28,7 +28,7 @@ type UserChangedUsernameEvent struct {
 }
 
 func (UserChangedUsernameEvent) Name() string {
-	return "user.change.username"
+	return "change.user.username"
 }
 
 type UserChangedPasswordEvent struct {
@@ -38,7 +38,7 @@ type UserChangedPasswordEvent struct {
 }
 
 func (UserChangedPasswordEvent) Name() string {
-	return "user.change.password"
+	return "change.user.password"
 }
 
 type UserChangedEmailEvent struct {
@@ -48,7 +48,7 @@ type UserChangedEmailEvent struct {
 }
 
 func (UserChangedEmailEvent) Name() string {
-	return "user.change.email"
+	return "change.user.email"
 }
 
 type UserChangedTelephoneEvent struct {
@@ -58,5 +58,5 @@ type UserChangedTelephoneEvent struct {
 }
 
 func (UserChangedTelephoneEvent) Name() string {
-	return "user.change.telephone"
+	return "change.user.telephone"
 }
