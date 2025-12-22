@@ -49,15 +49,6 @@ func (o *Order) MarkAsCompleted() error {
 	return nil
 }
 
-func (o *Order) UnmarkAsCompleted() error {
-	if !o.Completed {
-		return ErrCompletedStateDoesntChanged
-	}
-
-	o.Completed = false
-	return nil
-}
-
 func (o *Order) MarkAsCanceled() error {
 	if o.Canceled {
 		return ErrCompletedStateDoesntChanged
@@ -67,29 +58,11 @@ func (o *Order) MarkAsCanceled() error {
 	return nil
 }
 
-func (o *Order) UnmarkAsCanceled() error {
-	if !o.Canceled {
-		return ErrCanceledStateDoesntChanged
-	}
-
-	o.Canceled = false
-	return nil
-}
-
 func (o *Order) MarkAsTaken() error {
 	if o.Taken {
 		return ErrTakenStateDoesntChanged
 	}
 
 	o.Taken = true
-	return nil
-}
-
-func (o *Order) UnmarkAsTaken() error {
-	if !o.Taken {
-		return ErrTakenStateDoesntChanged
-	}
-
-	o.Taken = false
 	return nil
 }
