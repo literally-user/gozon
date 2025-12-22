@@ -54,6 +54,16 @@ func (i *CancelOrderInteractor) Execute(orderUUID uuid.UUID, bankName string, ca
 		return err
 	}
 
+	err = order.MarkAsCanceled()
+	if err != nil {
+		return err
+	}
+
+	err = i.OrderRepository.Update(order)
+	if err != nil {
+		return err
+	}
+
 	err = i.Publisher.Publish(publisher.OrderCanceledEvent{
 		Order:       order,
 		UserUUID:    user.UUID,
