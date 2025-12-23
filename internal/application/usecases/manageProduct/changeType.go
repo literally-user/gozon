@@ -18,7 +18,7 @@ func (i *ChangeProductTypeInteractor) Execute(uuid uuid.UUID, productType string
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldType := product.Type
+	oldType := product.ProductType()
 
 	err = product.ChangeType(productType)
 	if err != nil {

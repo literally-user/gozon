@@ -5,12 +5,12 @@ import "github.com/google/uuid"
 type Product struct {
 	UUID uuid.UUID
 
-	Title       string
-	Description string
-	Type        string
+	title       string
+	description string
+	productType string
 
 	count int
-	Price float64
+	price float64
 
 	rating       float32
 	shadowRating float32
@@ -44,38 +44,44 @@ func NewProduct(title, description, productType string, price float64) (Product,
 }
 
 func (p *Product) ChangeTitle(title string) error {
-	if title == p.Title {
+	if len(title) >= 30 {
+		return ErrTitleWrongFormat
+	}
+	if title == p.title {
 		return ErrTitleDoesntChanged
 	}
 
-	p.Title = title
+	p.title = title
 	return nil
 }
 
 func (p *Product) ChangeDescription(description string) error {
-	if description == p.Description {
+	if len(description) >= 500 {
+		return ErrDescriptionWrongFormat
+	}
+	if description == p.description {
 		return ErrDescriptionDoesntChanged
 	}
 
-	p.Description = description
+	p.description = description
 	return nil
 }
 
 func (p *Product) ChangeType(productType string) error {
-	if productType == p.Type {
+	if productType == p.productType {
 		return ErrTypeDoesntChanged
 	}
 
-	p.Type = productType
+	p.productType = productType
 	return nil
 }
 
 func (p *Product) ChangePrice(price float64) error {
-	if price == p.Price {
+	if price == p.price {
 		return ErrPriceDoesntChanged
 	}
 
-	p.Price = price
+	p.price = price
 	return nil
 }
 
@@ -105,6 +111,14 @@ func (p *Product) ChangeCount(count int) error {
 	p.count = count
 	return nil
 }
+
+func (p *Product) ProductTitle() string { return p.title }
+
+func (p *Product) ProductDescription() string { return p.description }
+
+func (p *Product) ProductPrice() float64 { return p.price }
+
+func (p *Product) ProductType() string { return p.productType }
 
 func (p *Product) ProductCount() int {
 	return p.count

@@ -18,7 +18,7 @@ func (i *ChangeProductPriceInteractor) Execute(uuid uuid.UUID, price float64) er
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldPrice := product.Price
+	oldPrice := product.ProductPrice()
 
 	err = product.ChangePrice(price)
 	if err != nil {

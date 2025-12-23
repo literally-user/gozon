@@ -18,7 +18,7 @@ func (i *ChangeProductDescriptionInteractor) Execute(uuid uuid.UUID, description
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldDescription := product.Description
+	oldDescription := product.ProductDescription()
 
 	err = product.ChangeDescription(description)
 	if err != nil {
