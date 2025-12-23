@@ -18,7 +18,7 @@ func (i *ChangeProductRatingInteractor) Execute(uuid uuid.UUID, rating float32) 
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldRating := product.Rating
+	oldRating := product.ProductRating()
 
 	err = product.ChangeRating(rating)
 	if err != nil {

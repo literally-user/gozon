@@ -9,11 +9,11 @@ type Product struct {
 	Description string
 	Type        string
 
-	Count int
+	count int
 	Price float64
 
-	Rating       float32
-	ShadowRating float32
+	rating       float32
+	shadowRating float32
 }
 
 func NewProduct(title, description, productType string, price float64) (Product, error) {
@@ -80,40 +80,40 @@ func (p *Product) ChangePrice(price float64) error {
 }
 
 func (p *Product) ChangeRating(rating float32) error {
-	if rating == p.Rating {
+	if rating == p.rating {
 		return ErrRatingDoesntChanged
 	}
 
-	p.Rating = rating
+	p.rating = rating
 	return nil
 }
 
 func (p *Product) ChangeShadowRating(rating float32) error {
-	if rating == p.ShadowRating {
+	if rating == p.shadowRating {
 		return ErrShadowRatingDoesntChanged
 	}
 
-	p.ShadowRating = rating
+	p.shadowRating = rating
 	return nil
 }
 
 func (p *Product) ChangeCount(count int) error {
-	if count == p.Count {
+	if count == p.count {
 		return ErrCountDoesntChanged
 	}
 
-	p.Count = count
+	p.count = count
 	return nil
 }
 
-func (p *Product) Count() int {
-	return p.Count
+func (p *Product) ProductCount() int {
+	return p.count
 }
 
-func (p *Product) ShadowRating() float32 {
-	return p.ShadowRating
+func (p *Product) ProductShadowRating() float32 {
+	return p.shadowRating
 }
 
-func (p *Product) Rating() float32 {
-	return p.Rating
+func (p *Product) ProductRating() float32 {
+	return p.rating
 }

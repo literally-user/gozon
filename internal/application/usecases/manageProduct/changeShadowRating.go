@@ -18,7 +18,7 @@ func (i *ChangeProductShadowRatingInteractor) Execute(uuid uuid.UUID, shadowRati
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldShadowRating := product.ShadowRating
+	oldShadowRating := product.ProductShadowRating()
 
 	err = product.ChangeShadowRating(shadowRating)
 	if err != nil {

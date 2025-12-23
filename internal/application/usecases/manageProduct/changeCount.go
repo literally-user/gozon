@@ -18,7 +18,7 @@ func (i *ChangeProductCountInteractor) Execute(uuid uuid.UUID, count int) error 
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldCount := product.Count
+	oldCount := product.ProductCount()
 
 	err = product.ChangeCount(count)
 	if err != nil {
