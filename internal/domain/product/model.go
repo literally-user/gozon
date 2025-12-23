@@ -106,14 +106,14 @@ func (p *Product) ChangeCount(count int) error {
 	return nil
 }
 
-func (p *Product) GetCount() int {
+func (p *Product) Count() int {
 	return p.Count
 }
 
-func (p *Product) GetShadowRating() float32 {
+func (p *Product) ShadowRating() float32 {
 	return p.ShadowRating
 }
 
-func (p *Product) GetRating() float32 {
+func (p *Product) Rating() float32 {
 	return p.Rating
 }

@@ -34,7 +34,7 @@ func (i *CancelOrderInteractor) Execute(orderUUID uuid.UUID, bankName string, ca
 		return applicationErrors.ErrProductNotFound
 	}
 
-	err = product.ChangeCount(product.GetCount() + 1)
+	err = product.ChangeCount(product.Count() + 1)
 	if err != nil {
 		return err
 	}

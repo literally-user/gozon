@@ -29,7 +29,7 @@ func (i *RemoveFromCartInteractor) Execute(uuid uuid.UUID) error {
 		return applicationErrors.ErrProductNotFound
 	}
 
-	err = product.ChangeShadowRating(product.GetShadowRating() - 0.1)
+	err = product.ChangeShadowRating(product.ShadowRating() - 0.1)
 	if err != nil {
 		return err
 	}
