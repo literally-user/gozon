@@ -2,6 +2,7 @@ package user
 
 import (
 	"crypto/sha256"
+	"fmt"
 	"regexp"
 	"strings"
 	"unicode"
@@ -29,22 +30,22 @@ func NewUser(username, password, email, telephone string) (User, error) {
 
 	err = user.ChangeUsername(username)
 	if err != nil {
-		return User{}, err
+		return User{}, fmt.Errorf("failed to change username: %w", err)
 	}
 
 	err = user.ChangePassword(password)
 	if err != nil {
-		return User{}, err
+		return User{}, fmt.Errorf("failed to change password: %w", err)
 	}
 
 	err = user.ChangeEmail(email)
 	if err != nil {
-		return User{}, err
+		return User{}, fmt.Errorf("failed to change email: %w", err)
 	}
 
 	err = user.ChangeTelephone(telephone)
 	if err != nil {
-		return User{}, err
+		return User{}, fmt.Errorf("failed to change telephone: %w", err)
 	}
 
 	return user, nil

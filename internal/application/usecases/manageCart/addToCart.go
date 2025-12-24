@@ -29,7 +29,7 @@ func (i *AddToCartInteractor) Execute(cartItemDTO DTO) (cartItemDomain.CartItem,
 		return cartItemDomain.CartItem{}, applicationErrors.ErrProductNotFound
 	}
 
-	err = product.ChangeShadowRating(product.ProductShadowRating() + 0.1)
+	err = product.ChangeShadowRating(product.ShadowRating() + 0.1)
 	if err != nil {
 		return cartItemDomain.CartItem{}, err
 	}

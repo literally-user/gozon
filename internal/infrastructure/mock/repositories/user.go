@@ -4,57 +4,64 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	domain "github.com/literally_user/gozon/internal/domain/user"
+	userApplication "github.com/literally_user/gozon/internal/application/errors"
+	userDomain "github.com/literally_user/gozon/internal/domain/user"
 )
 
-var storage = make([]domain.User, 0)
-
-type ImMemoryUserRepository struct{}
-
-func NewInMemoryUserRepository() ImMemoryUserRepository {
-	return ImMemoryUserRepository{}
+func NewUserStorage() []userDomain.User {
+	return make([]userDomain.User, 0)
 }
 
-func (ImMemoryUserRepository) Create(user domain.User) error {
-	for _, val := range storage {
+type ImMemoryUserRepository struct {
+	Storage []userDomain.User
+}
+
+func NewInMemoryUserRepository(storage []userDomain.User) ImMemoryUserRepository {
+	return ImMemoryUserRepository{
+		Storage: storage,
+	}
+}
+
+func (r *ImMemoryUserRepository) Create(user userDomain.User) error {
+	for _, val := range r.Storage {
 		if val.UUID == user.UUID {
 			return errors.New("already has")
 		}
 	}
-	storage = append(storage, user)
+	r.Storage = append(r.Storage, user)
 	return nil
 }
 
-func (ImMemoryUserRepository) Update(user domain.User) error {
-	for i, val := range storage {
+func (r *ImMemoryUserRepository) Update(user userDomain.User) error {
+	for i, val := range r.Storage {
 		if val.UUID == user.UUID {
-			storage[i] = user
+			r.Storage[i] = user
 			return nil
 		}
 	}
 
-	return errors.New("not found")
+	return userApplication.ErrUserNotFound
 }
 
-func (ImMemoryUserRepository) Remove(user domain.User) error {
-	for i, val := range storage {
+func (r *ImMemoryUserRepository) Remove(user userDomain.User) error {
+	for i, val := range r.Storage {
 		if val.UUID == user.UUID {
-			storage[i] = domain.User{}
+			r.Storage[i] = userDomain.User{}
 			return nil
 		}
 	}
-	return errors.New("not found")
+	return userApplication.ErrUserNotFound
 }
 
-func (ImMemoryUserRepository) GetByUUID(uuid uuid.UUID) (domain.User, error) {
-	for _, val := range storage {
+func (r *ImMemoryUserRepository) GetByUUID(uuid uuid.UUID) (userDomain.User, error) {
+	for _, val := range r.Storage {
 		if val.UUID == uuid {
 			return val, nil
 		}
 	}
-	return domain.User{}, errors.New("not found")
+	return userDomain.User{}, userApplication.ErrUserNotFound
 }
 
-func (ImMemoryUserRepository) GetAllUsers() []domain.User {
-	return storage
+func (r *ImMemoryUserRepository) GetAllUsers() []userDomain.User {
+	return r.Storage
 }

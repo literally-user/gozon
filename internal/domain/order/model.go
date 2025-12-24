@@ -1,6 +1,10 @@
 package order
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Order struct {
 	UUID uuid.UUID
@@ -25,7 +29,7 @@ func NewOrder(address string, productUUID, userUUID uuid.UUID) (Order, error) {
 
 	err := order.ChangeAddress(address)
 	if err != nil {
-		return Order{}, err
+		return Order{}, fmt.Errorf("failed to change address: %w", err)
 	}
 
 	return order, nil

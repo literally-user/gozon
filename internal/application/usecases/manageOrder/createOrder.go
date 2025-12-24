@@ -38,7 +38,7 @@ func (i *CreateOrderInteractor) Execute(orderDTO DTO) (domainOrder.Order, error)
 		return domainOrder.Order{}, err
 	}
 
-	err = product.ChangeCount(product.ProductCount() - 1)
+	err = product.ChangeCount(product.Count() - 1)
 	if err != nil {
 		return domainOrder.Order{}, err
 	}

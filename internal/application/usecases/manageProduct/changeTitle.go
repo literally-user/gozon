@@ -18,7 +18,7 @@ func (i *ChangeProductTitleInteractor) Execute(uuid uuid.UUID, title string) err
 		return applicationErrors.ErrProductNotFound
 	}
 
-	oldTitle := product.ProductTitle()
+	oldTitle := product.Title()
 
 	err = product.ChangeTitle(title)
 	if err != nil {

@@ -1,6 +1,10 @@
 package product
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Product struct {
 	UUID uuid.UUID
@@ -22,22 +26,22 @@ func NewProduct(title, description, productType string, price float64) (Product,
 
 	err = product.ChangeTitle(title)
 	if err != nil {
-		return Product{}, err
+		return Product{}, fmt.Errorf("failed to change title: %w", err)
 	}
 
 	err = product.ChangeDescription(description)
 	if err != nil {
-		return Product{}, err
+		return Product{}, fmt.Errorf("failed to change description: %w", err)
 	}
 
 	err = product.ChangeType(productType)
 	if err != nil {
-		return Product{}, err
+		return Product{}, fmt.Errorf("failed to change type: %w", err)
 	}
 
 	err = product.ChangePrice(price)
 	if err != nil {
-		return Product{}, err
+		return Product{}, fmt.Errorf("failed to change price: %w", err)
 	}
 
 	return product, nil
@@ -112,22 +116,22 @@ func (p *Product) ChangeCount(count int) error {
 	return nil
 }
 
-func (p *Product) ProductTitle() string { return p.title }
+func (p *Product) Title() string { return p.title }
 
-func (p *Product) ProductDescription() string { return p.description }
+func (p *Product) Description() string { return p.description }
 
-func (p *Product) ProductPrice() float64 { return p.price }
+func (p *Product) Price() float64 { return p.price }
 
-func (p *Product) ProductType() string { return p.productType }
+func (p *Product) Type() string { return p.productType }
 
-func (p *Product) ProductCount() int {
+func (p *Product) Count() int {
 	return p.count
 }
 
-func (p *Product) ProductShadowRating() float32 {
+func (p *Product) ShadowRating() float32 {
 	return p.shadowRating
 }
 
-func (p *Product) ProductRating() float32 {
+func (p *Product) Rating() float32 {
 	return p.rating
 }
