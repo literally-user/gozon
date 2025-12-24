@@ -38,7 +38,7 @@ func (i *CreateOrderInteractor) Execute(orderDTO DTO) error {
 		return err
 	}
 
-	err = product.ChangeCount(product.Count() - 1)
+	err = product.ChangeCount(product.ProductCount() - 1)
 	if err != nil {
 		return err
 	}
@@ -68,6 +68,9 @@ func (i *CreateOrderInteractor) Execute(orderDTO DTO) error {
 		UserUUID:    user.UUID,
 		ProductUUID: product.UUID,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

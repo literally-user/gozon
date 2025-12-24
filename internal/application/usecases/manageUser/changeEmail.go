@@ -30,6 +30,9 @@ func (i *ChangeEmailInteractor) Execute(uuid uuid.UUID, email string) error {
 		OldEmail: oldEmail,
 		NewEmail: email,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

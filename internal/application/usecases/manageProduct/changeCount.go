@@ -30,6 +30,9 @@ func (i *ChangeProductCountInteractor) Execute(uuid uuid.UUID, count int) error 
 		OldCount: oldCount,
 		NewCount: count,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

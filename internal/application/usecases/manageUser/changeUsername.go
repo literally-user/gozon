@@ -30,6 +30,9 @@ func (i *ChangeUsernameInteractor) Execute(uuid uuid.UUID, username string) erro
 		OldUsername: oldUsername,
 		NewUsername: username,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

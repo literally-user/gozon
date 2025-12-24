@@ -25,6 +25,8 @@ func NewUser(username, password, email, telephone string) (User, error) {
 	var err error
 	var user User
 
+	user.UUID = uuid.New()
+
 	err = user.ChangeUsername(username)
 	if err != nil {
 		return User{}, err

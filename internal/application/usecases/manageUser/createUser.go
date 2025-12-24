@@ -3,7 +3,6 @@ package manageUser
 import (
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 	"github.com/literally_user/gozon/internal/domain/user"
 )
 
@@ -12,23 +11,23 @@ type CreateUserInteractor struct {
 	Publisher  publisher.Publisher
 }
 
-func (i *CreateUserInteractor) Execute(userDTO DTO) error {
+func (i *CreateUserInteractor) Execute(userDTO DTO) (user.User, error) {
 	newUser, err := user.NewUser(userDTO.Username, userDTO.Password, userDTO.Email, userDTO.Telephone)
 	if err != nil {
-		return applicationErrors.ErrUserNotFound
+		return user.User{}, err
 	}
 
 	err = i.Repository.Create(newUser)
 	if err != nil {
-		return err
+		return user.User{}, err
 	}
 
 	err = i.Publisher.Publish(publisher.UserCreatedEvent{
 		User: newUser,
 	})
 	if err != nil {
-		return err
+		return user.User{}, err
 	}
 
-	return nil
+	return newUser, nil
 }

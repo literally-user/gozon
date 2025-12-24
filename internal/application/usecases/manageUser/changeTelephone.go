@@ -30,6 +30,9 @@ func (i *ChangeTelephoneInteractor) Execute(uuid uuid.UUID, telephone string) er
 		OldTelephone: oldTelephone,
 		NewTelephone: telephone,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

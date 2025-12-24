@@ -4,7 +4,7 @@ import (
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
 	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
-	"github.com/literally_user/gozon/internal/domain/cartItem"
+	cartItemDomain "github.com/literally_user/gozon/internal/domain/cartItem"
 )
 
 type AddToCartInteractor struct {
@@ -14,7 +14,7 @@ type AddToCartInteractor struct {
 }
 
 func (i *AddToCartInteractor) Execute(cartItemDTO DTO) error {
-	newCartItem, err := cartItem.NewCartItem(cartItemDTO.UserUUID, cartItemDTO.ProductUUID)
+	newCartItem, err := cartItemDomain.NewCartItem(cartItemDTO.UserUUID, cartItemDTO.ProductUUID)
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func (i *AddToCartInteractor) Execute(cartItemDTO DTO) error {
 		return applicationErrors.ErrProductNotFound
 	}
 
-	err = product.ChangeShadowRating(product.ShadowRating() + 0.1)
+	err = product.ChangeShadowRating(product.ProductShadowRating() + 0.1)
 	if err != nil {
 		return err
 	}

@@ -23,8 +23,7 @@ func (i *ChangePasswordInteractor) Execute(uuid uuid.UUID, password string) erro
 	oldPassword := user.Password
 	newHashedPassword := sha256.Sum256([]byte(password))
 
-	err = user.ChangePassword(password)
-	if err != nil {
+	if err := user.ChangePassword(password); err != nil {
 		return err
 	}
 
@@ -33,6 +32,9 @@ func (i *ChangePasswordInteractor) Execute(uuid uuid.UUID, password string) erro
 		OldPassword: oldPassword,
 		NewPassword: newHashedPassword,
 	})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
