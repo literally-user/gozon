@@ -26,7 +26,7 @@ func main() {
 func run(ctx context.Context) {
 	// Config reader
 	var (
-		configReader = config.NewReader("/home/ltu/GolandProjects/gozon/internal/config/config.toml")
+		configReader = config.NewReader("your config path")
 		configData   = configReader.Read()
 	)
 
@@ -81,7 +81,7 @@ func run(ctx context.Context) {
 
 	// Wait for sigterm/sigint signal from OS
 	<-ctx.Done()
-	
+
 	log.Println("Shutting down gracefully")
 	shutdownContext, cancel := context.WithTimeout(context.Background(), time.Second*15)
 	defer cancel()
