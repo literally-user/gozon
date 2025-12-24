@@ -19,48 +19,48 @@ type CreateOrderInteractor struct {
 	BankAdapterFactory bank.AdapterFactory
 }
 
-func (i *CreateOrderInteractor) Execute(orderDTO DTO) error {
+func (i *CreateOrderInteractor) Execute(orderDTO DTO) (domainOrder.Order, error) {
 	user, err := i.UserRepository.GetByUUID(orderDTO.UserUUID)
 	if err != nil {
-		return applicationErrors.ErrUserNotFound
+		return domainOrder.Order{}, applicationErrors.ErrUserNotFound
 	}
 	cartItem, err := i.CartItemRepository.GetByUUID(orderDTO.CartItemUUID)
 	if err != nil {
-		return applicationErrors.ErrCartItemNotFound
+		return domainOrder.Order{}, applicationErrors.ErrCartItemNotFound
 	}
 	product, err := i.ProductRepository.GetByUUID(cartItem.ProductUUID)
 	if err != nil {
-		return applicationErrors.ErrProductNotFound
+		return domainOrder.Order{}, applicationErrors.ErrProductNotFound
 	}
 
 	err = i.CartItemRepository.Remove(cartItem)
 	if err != nil {
-		return err
+		return domainOrder.Order{}, err
 	}
 
 	err = product.ChangeCount(product.ProductCount() - 1)
 	if err != nil {
-		return err
+		return domainOrder.Order{}, err
 	}
 
 	err = i.ProductRepository.Update(product)
 	if err != nil {
-		return err
+		return domainOrder.Order{}, err
 	}
 
 	bankAdapter, err := i.BankAdapterFactory.GetBankAdapter(orderDTO.BankName)
 	if err != nil {
-		return applicationErrors.ErrBankNotFound
+		return domainOrder.Order{}, applicationErrors.ErrBankNotFound
 	}
 
 	err = bankAdapter.Refund(orderDTO.Card)
 	if err != nil {
-		return err
+		return domainOrder.Order{}, err
 	}
 
 	order, err := domainOrder.NewOrder(orderDTO.Address, product.UUID, user.UUID)
 	if err != nil {
-		return err
+		return domainOrder.Order{}, err
 	}
 
 	err = i.Publisher.Publish(publisher.OrderCreatedEvent{
@@ -69,8 +69,8 @@ func (i *CreateOrderInteractor) Execute(orderDTO DTO) error {
 		ProductUUID: product.UUID,
 	})
 	if err != nil {
-		return err
+		return domainOrder.Order{}, err
 	}
 
-	return nil
+	return order, nil
 }

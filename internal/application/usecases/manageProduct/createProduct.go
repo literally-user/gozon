@@ -11,23 +11,23 @@ type CreateProductInteractor struct {
 	Publisher  publisher.Publisher
 }
 
-func (i *CreateProductInteractor) Execute(productDTO DTO) error {
+func (i *CreateProductInteractor) Execute(productDTO DTO) (product.Product, error) {
 	newProduct, err := product.NewProduct(productDTO.Title, productDTO.Description, productDTO.ProductType, productDTO.Price)
 	if err != nil {
-		return err
+		return product.Product{}, err
 	}
 
 	err = i.Repository.Create(newProduct)
 	if err != nil {
-		return err
+		return product.Product{}, err
 	}
 
 	err = i.Publisher.Publish(publisher.ProductCreatedEvent{
 		Product: newProduct,
 	})
 	if err != nil {
-		return err
+		return product.Product{}, err
 	}
 
-	return nil
+	return newProduct, nil
 }
