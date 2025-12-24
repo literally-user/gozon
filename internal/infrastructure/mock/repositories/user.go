@@ -21,6 +21,7 @@ func (ImMemoryUserRepository) Create(user domain.User) error {
 			return errors.New("already has")
 		}
 	}
+	storage = append(storage, user)
 	return nil
 }
 
