@@ -118,8 +118,9 @@ func (u *User) ChangeEmail(email string) error {
 	if !match {
 		return ErrEmailWrongFormat
 	}
+
 	if email == u.Email {
-		return ErrEmailDoesntChanged
+		return ErrEmailDoesntChanged // or just return nil if same email is okay
 	}
 
 	u.Email = email

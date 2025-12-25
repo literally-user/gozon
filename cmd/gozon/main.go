@@ -26,7 +26,7 @@ func main() {
 func run(ctx context.Context) {
 	// Config reader
 	var (
-		configReader = config.NewReader("your config path")
+		configReader = config.NewReader("/home/ltu/GolandProjects/gozon/internal/config/config.toml")
 		configData   = configReader.Read()
 	)
 
@@ -55,6 +55,18 @@ func run(ctx context.Context) {
 			Repository: &userRepository,
 			Publisher:  mockPublisher,
 		}
+		changeUsernameInteractor = userApplication.ChangeUsernameInteractor{
+			Repository: &userRepository,
+			Publisher:  mockPublisher,
+		}
+		changePasswordInteractor = userApplication.ChangePasswordInteractor{
+			Repository: &userRepository,
+			Publisher:  mockPublisher,
+		}
+		changeEmailInteractor = userApplication.ChangeEmailInteractor{
+			Repository: &userRepository,
+			Publisher:  mockPublisher,
+		}
 	)
 
 	// Controllers
@@ -65,11 +77,24 @@ func run(ctx context.Context) {
 		deleteUserController = userPresentation.DeleteUserController{
 			DeleteUserInteractor: deleteUserInteractor,
 		}
+		changeUsernameController = userPresentation.ChangeUsernameController{
+			ChangeUsernameInteractor: changeUsernameInteractor,
+		}
+		changePasswordController = userPresentation.ChangePasswordController{
+			ChangePasswordInteractor: changePasswordInteractor,
+		}
+		changeEmailController = userPresentation.ChangeEmailController{
+			ChangeEmailInteractor: changeEmailInteractor,
+		}
 	)
 
 	// Register handlers
 	mux.HandleFunc("POST /users/", createUserController.Execute)
 	mux.HandleFunc("DELETE /users/", deleteUserController.Execute)
+
+	mux.HandleFunc("POST /users/me/username", changeUsernameController.Execute)
+	mux.HandleFunc("POST /users/me/password", changePasswordController.Execute)
+	mux.HandleFunc("POST /users/me/email", changeEmailController.Execute)
 
 	// Serve
 	go func() {
