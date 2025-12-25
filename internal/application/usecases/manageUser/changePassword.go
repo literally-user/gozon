@@ -2,11 +2,11 @@ package manageUser
 
 import (
 	"crypto/sha256"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangePasswordInteractor struct {
@@ -17,14 +17,14 @@ type ChangePasswordInteractor struct {
 func (i *ChangePasswordInteractor) Execute(uuid uuid.UUID, password string) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return applicationErrors.ErrUserNotFound
+		return fmt.Errorf("change password: failed to get user by uuid: %w", err)
 	}
 
 	oldPassword := user.Password
 	newHashedPassword := sha256.Sum256([]byte(password))
 
-	if err := user.ChangePassword(password); err != nil {
-		return err
+	if err = user.ChangePassword(password); err != nil {
+		return fmt.Errorf("change password: failed to change password: %w", err)
 	}
 
 	err = i.Publisher.Publish(publisher.UserChangedPasswordEvent{
@@ -33,7 +33,7 @@ func (i *ChangePasswordInteractor) Execute(uuid uuid.UUID, password string) erro
 		NewPassword: newHashedPassword,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("change password: failed to publish: %w", err)
 	}
 
 	return nil

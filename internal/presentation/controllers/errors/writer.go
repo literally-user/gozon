@@ -2,6 +2,7 @@ package errors
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -18,9 +19,12 @@ func WriteError(
 	detail string,
 ) {
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(ErrorDetails{
+	err := json.NewEncoder(w).Encode(ErrorDetails{
 		Status:   status,
 		Detail:   detail,
 		Instance: r.URL.Path,
 	})
+	if err != nil {
+		log.Printf("Error writer: %v", err)
+	}
 }

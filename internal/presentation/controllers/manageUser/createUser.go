@@ -2,6 +2,7 @@ package manageUser
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	userApplication "github.com/literally_user/gozon/internal/application/usecases/manageUser"
@@ -20,7 +21,7 @@ type CreateUserController struct {
 }
 
 func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+	defer r.Body.Close() //nolint:errcheck
 
 	var req CreateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -36,5 +37,8 @@ func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Location", "/users/"+newUser.UUID.String())
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(newUser)
+	err = json.NewEncoder(w).Encode(newUser)
+	if err != nil {
+		log.Printf("Error create user: %v", err)
+	}
 }

@@ -1,10 +1,11 @@
 package manageUser
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeEmailInteractor struct {
@@ -15,14 +16,14 @@ type ChangeEmailInteractor struct {
 func (i *ChangeEmailInteractor) Execute(uuid uuid.UUID, email string) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return applicationErrors.ErrUserNotFound
+		return fmt.Errorf("change email: failed to get user by uuid: %w", err)
 	}
 
 	oldEmail := user.Email
 
 	err = user.ChangeEmail(email)
 	if err != nil {
-		return err
+		return fmt.Errorf("change email: failed to change email: %w", err)
 	}
 
 	err = i.Publisher.Publish(publisher.UserChangedEmailEvent{
@@ -31,7 +32,7 @@ func (i *ChangeEmailInteractor) Execute(uuid uuid.UUID, email string) error {
 		NewEmail: email,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("change email: failed to publish: %w", err)
 	}
 
 	return nil

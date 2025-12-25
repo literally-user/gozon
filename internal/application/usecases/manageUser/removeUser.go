@@ -1,10 +1,11 @@
 package manageUser
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type DeleteUserInteractor struct {
@@ -15,19 +16,19 @@ type DeleteUserInteractor struct {
 func (i *DeleteUserInteractor) Execute(uuid uuid.UUID) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return applicationErrors.ErrUserNotFound
+		return fmt.Errorf("remove user: failed to get user by uuid: %w", err)
 	}
 
 	err = i.Repository.Remove(user)
 	if err != nil {
-		return err
+		return fmt.Errorf("remove user: failed to remove user: %w", err)
 	}
 
 	err = i.Publisher.Publish(publisher.UserRemovedEvent{
 		User: user,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("remove user: failed to publish: %w", err)
 	}
 
 	return nil

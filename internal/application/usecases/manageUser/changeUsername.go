@@ -1,10 +1,11 @@
 package manageUser
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeUsernameInteractor struct {
@@ -15,14 +16,14 @@ type ChangeUsernameInteractor struct {
 func (i *ChangeUsernameInteractor) Execute(uuid uuid.UUID, username string) error {
 	user, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return applicationErrors.ErrUserNotFound
+		return fmt.Errorf("change username: failed to get user by uuid: %w", err)
 	}
 
 	oldUsername := user.Username
 
 	err = user.ChangeUsername(username)
 	if err != nil {
-		return err
+		return fmt.Errorf("change username: failed to change username: %w", err)
 	}
 
 	err = i.Publisher.Publish(publisher.UserChangedUsernameEvent{
@@ -31,7 +32,7 @@ func (i *ChangeUsernameInteractor) Execute(uuid uuid.UUID, username string) erro
 		NewUsername: username,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("change username: failed to publish: %w", err)
 	}
 
 	return nil

@@ -1,10 +1,11 @@
 package manageProduct
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeProductShadowRatingInteractor struct {
@@ -15,19 +16,19 @@ type ChangeProductShadowRatingInteractor struct {
 func (i *ChangeProductShadowRatingInteractor) Execute(uuid uuid.UUID, shadowRating float32) error {
 	product, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return applicationErrors.ErrProductNotFound
+		return fmt.Errorf("change product shadow rating: failed to get product by uuid: %w", err)
 	}
 
 	oldShadowRating := product.ShadowRating()
 
 	err = product.ChangeShadowRating(shadowRating)
 	if err != nil {
-		return err
+		return fmt.Errorf("change product shadow rating: failed to shadow rating: %w", err)
 	}
 
 	err = i.Repository.Update(product)
 	if err != nil {
-		return err
+		return fmt.Errorf("change product shadow rating: failed to update product: %w", err)
 	}
 
 	err = i.Publisher.Publish(publisher.ProductChangedShadowRatingEvent{
@@ -36,7 +37,7 @@ func (i *ChangeProductShadowRatingInteractor) Execute(uuid uuid.UUID, shadowRati
 		NewShadowRating: shadowRating,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("change product shadow rating: failed to publish: %w", err)
 	}
 
 	return nil

@@ -1,10 +1,11 @@
 package manageProduct
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/literally_user/gozon/internal/application/common/publisher"
 	"github.com/literally_user/gozon/internal/application/common/repositories"
-	applicationErrors "github.com/literally_user/gozon/internal/application/errors"
 )
 
 type ChangeProductRatingInteractor struct {
@@ -15,19 +16,19 @@ type ChangeProductRatingInteractor struct {
 func (i *ChangeProductRatingInteractor) Execute(uuid uuid.UUID, rating float32) error {
 	product, err := i.Repository.GetByUUID(uuid)
 	if err != nil {
-		return applicationErrors.ErrProductNotFound
+		return fmt.Errorf("change product rating: failed to get product by uuid: %w", err)
 	}
 
 	oldRating := product.Rating()
 
 	err = product.ChangeRating(rating)
 	if err != nil {
-		return err
+		return fmt.Errorf("change product rating: failed to change rating: %w", err)
 	}
 
 	err = i.Repository.Update(product)
 	if err != nil {
-		return err
+		return fmt.Errorf("change product rating: failed to update: %w", err)
 	}
 
 	err = i.Publisher.Publish(publisher.ProductChangedRatingEvent{
@@ -36,7 +37,7 @@ func (i *ChangeProductRatingInteractor) Execute(uuid uuid.UUID, rating float32) 
 		NewRating: rating,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("change product rating: failed to publish: %w", err)
 	}
 
 	return nil
