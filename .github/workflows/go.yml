@@ -18,7 +18,7 @@ jobs:
         with:
           go-version: '1.24'
 
-      - name: Install golangci-lint
+      - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
