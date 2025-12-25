@@ -29,7 +29,7 @@ func NewOrder(address string, productUUID, userUUID uuid.UUID) (Order, error) {
 
 	err := order.ChangeAddress(address)
 	if err != nil {
-		return Order{}, fmt.Errorf("failed to change address: %w", err)
+		return Order{}, fmt.Errorf("failed to set address: %w", err)
 	}
 
 	return order, nil
