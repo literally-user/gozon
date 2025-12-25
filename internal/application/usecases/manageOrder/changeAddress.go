@@ -14,17 +14,17 @@ type ChangeAddressInteractor struct {
 func (i *ChangeAddressInteractor) Execute(orderUUID uuid.UUID, address string) error {
 	order, err := i.Repository.GetByUUID(orderUUID)
 	if err != nil {
-		return fmt.Errorf("change address interactor: failed to get order by uuid: %w", err)
+		return fmt.Errorf("change address: failed to get order by uuid: %w", err)
 	}
 
 	err = order.ChangeAddress(address)
 	if err != nil {
-		return fmt.Errorf("change address interactor: failed to change address: %w", err)
+		return fmt.Errorf("change address: failed to change address: %w", err)
 	}
 
 	err = i.Repository.Update(order)
 	if err != nil {
-		return fmt.Errorf("change address interactor: failed to update order: %w", err)
+		return fmt.Errorf("change address: failed to update order: %w", err)
 	}
 
 	return nil

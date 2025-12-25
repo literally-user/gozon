@@ -14,17 +14,17 @@ type TakeOrderInteractor struct {
 func (i *TakeOrderInteractor) Execute(orderUUID uuid.UUID) error {
 	order, err := i.Repository.GetByUUID(orderUUID)
 	if err != nil {
-		return fmt.Errorf("take order interactor: failed to get order by uuid: %w", err)
+		return fmt.Errorf("take order: failed to get order by uuid: %w", err)
 	}
 
 	err = order.MarkAsTaken()
 	if err != nil {
-		return fmt.Errorf("take order interactor: failed to make as taken: %w", err)
+		return fmt.Errorf("take order: failed to make as taken: %w", err)
 	}
 
 	err = i.Repository.Update(order)
 	if err != nil {
-		return fmt.Errorf("take order interactor: failed to update order: %w", err)
+		return fmt.Errorf("take order: failed to update order: %w", err)
 	}
 
 	return nil

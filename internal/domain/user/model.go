@@ -30,22 +30,22 @@ func NewUser(username, password, email, telephone string) (User, error) {
 
 	err = user.ChangeUsername(username)
 	if err != nil {
-		return User{}, fmt.Errorf("failed to change username: %w", err)
+		return User{}, fmt.Errorf("failed to set username: %w", err)
 	}
 
 	err = user.ChangePassword(password)
 	if err != nil {
-		return User{}, fmt.Errorf("failed to change password: %w", err)
+		return User{}, fmt.Errorf("failed to set password: %w", err)
 	}
 
 	err = user.ChangeEmail(email)
 	if err != nil {
-		return User{}, fmt.Errorf("failed to change email: %w", err)
+		return User{}, fmt.Errorf("failed to set email: %w", err)
 	}
 
 	err = user.ChangeTelephone(telephone)
 	if err != nil {
-		return User{}, fmt.Errorf("failed to change telephone: %w", err)
+		return User{}, fmt.Errorf("failed to set telephone: %w", err)
 	}
 
 	return user, nil

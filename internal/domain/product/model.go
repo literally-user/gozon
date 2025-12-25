@@ -26,22 +26,22 @@ func NewProduct(title, description, productType string, price float64) (Product,
 
 	err = product.ChangeTitle(title)
 	if err != nil {
-		return Product{}, fmt.Errorf("failed to change title: %w", err)
+		return Product{}, fmt.Errorf("failed to ste title: %w", err)
 	}
 
 	err = product.ChangeDescription(description)
 	if err != nil {
-		return Product{}, fmt.Errorf("failed to change description: %w", err)
+		return Product{}, fmt.Errorf("failed to set description: %w", err)
 	}
 
 	err = product.ChangeType(productType)
 	if err != nil {
-		return Product{}, fmt.Errorf("failed to change type: %w", err)
+		return Product{}, fmt.Errorf("failed to set type: %w", err)
 	}
 
 	err = product.ChangePrice(price)
 	if err != nil {
-		return Product{}, fmt.Errorf("failed to change price: %w", err)
+		return Product{}, fmt.Errorf("failed to set price: %w", err)
 	}
 
 	return product, nil
