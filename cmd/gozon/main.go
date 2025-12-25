@@ -23,9 +23,6 @@ func main() {
 	run(ctx)
 }
 
-// TODO: Запретить пуш в main
-// TODO: Врапнуть все ошибки в fmt.Errorf()
-
 func run(ctx context.Context) {
 	// Config reader
 	var (
