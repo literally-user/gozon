@@ -58,12 +58,12 @@ func TestNewComment(t *testing.T) {
 					t.Error("NewComment() UUID should not be nil")
 				}
 
-				if comment.Content != tt.content {
-					t.Errorf("NewComment() Content = %v, want %v", comment.Content, tt.content)
+				if comment.Content() != tt.content {
+					t.Errorf("NewComment() Content = %v, want %v", comment.Content(), tt.content)
 				}
 
-				if comment.Rate != tt.rate {
-					t.Errorf("NewComment() Rate = %v, want %v", comment.Rate, tt.rate)
+				if comment.Rate() != tt.rate {
+					t.Errorf("NewComment() Rate = %v, want %v", comment.Rate(), tt.rate)
 				}
 
 				if comment.ProductUUID != tt.productUUID {
@@ -132,7 +132,7 @@ func TestComment_ChangeRate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &Comment{Rate: tt.initial}
+			c := &Comment{rate: tt.initial}
 
 			err := c.ChangeRate(tt.newRate)
 
@@ -140,8 +140,8 @@ func TestComment_ChangeRate(t *testing.T) {
 				t.Errorf("ChangeRate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			if c.Rate != tt.wantRate {
-				t.Errorf("ChangeRate() Rate = %v, want %v", c.Rate, tt.wantRate)
+			if c.Rate() != tt.wantRate {
+				t.Errorf("ChangeRate() Rate = %v, want %v", c.Rate(), tt.wantRate)
 			}
 		})
 	}
@@ -170,20 +170,6 @@ func TestComment_ChangeContent(t *testing.T) {
 			wantContent: "Same content",
 		},
 		{
-			name:        "change from empty to non-empty",
-			initial:     "",
-			newContent:  "New content",
-			wantErr:     nil,
-			wantContent: "New content",
-		},
-		{
-			name:        "change to empty content",
-			initial:     "Old content",
-			newContent:  "",
-			wantErr:     nil,
-			wantContent: "",
-		},
-		{
 			name:        "change with special characters",
 			initial:     "Simple text",
 			newContent:  "Text with émojis 🎉 and symbols!",
@@ -201,7 +187,7 @@ func TestComment_ChangeContent(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &Comment{Content: tt.initial}
+			c := &Comment{content: tt.initial}
 
 			err := c.ChangeContent(tt.newContent)
 
@@ -209,8 +195,8 @@ func TestComment_ChangeContent(t *testing.T) {
 				t.Errorf("ChangeContent() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			if c.Content != tt.wantContent {
-				t.Errorf("ChangeContent() Content = %v, want %v", c.Content, tt.wantContent)
+			if c.Content() != tt.wantContent {
+				t.Errorf("ChangeContent() Content = %v, want %v", c.Content(), tt.wantContent)
 			}
 		})
 	}

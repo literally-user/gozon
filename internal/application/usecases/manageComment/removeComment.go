@@ -20,6 +20,10 @@ func (i *RemoveCommentInteractor) Execute(commentUUID, productUUID uuid.UUID) er
 		return fmt.Errorf("publish comment: failed to get product by uuid: %w", err)
 	}
 	comment, err := i.CommentRepository.GetByUUID(commentUUID)
+	if err != nil {
+		return fmt.Errorf("publish comment: failed to get comment by uuid: %w", err)
+	}
+
 	err = i.CommentRepository.Remove(comment)
 	if err != nil {
 		return fmt.Errorf("publish comment: failed to remove comment: %w", err)
