@@ -77,7 +77,7 @@ func run(ctx context.Context) {
 			log.Fatal(err)
 		}
 	}()
-	log.Printf("Server started at http://%s:%d", configData.API.Host, configData.API.Port)
+	log.Printf("Server started at http://%s:%d...", configData.API.Host, configData.API.Port)
 
 	// Wait for sigterm/sigint signal from OS
 	<-ctx.Done()
