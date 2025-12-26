@@ -11,34 +11,30 @@ import (
 	"github.com/literally_user/gozon/internal/presentation/controllers/errors"
 )
 
-type CreateUserRequest struct {
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	Email     string `json:"email"`
-	Telephone string `json:"telephone"`
+type LoginRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
-type CreateUserController struct {
-	CreateUserInteractor userApplication.CreateUserInteractor
-	TokenManager         auth.TokenManager
+type LoginController struct {
+	GetUserInteractor userApplication.GetUserInteractor
+	TokenManager      auth.TokenManager
 }
 
-func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close() //nolint:errcheck
-
-	var req CreateUserRequest
+func (c *LoginController) Execute(w http.ResponseWriter, r *http.Request) {
+	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		errors.WriteError(w, r, http.StatusBadRequest, "Invalid json body")
 		return
 	}
 
-	newUser, err := c.CreateUserInteractor.Execute(userApplication.DTO(req))
+	user, err := c.GetUserInteractor.Execute(req.Username, req.Password)
 	if err != nil {
-		errors.WriteError(w, r, http.StatusBadRequest, err.Error())
+		errors.WriteError(w, r, http.StatusNotFound, err.Error())
 		return
 	}
 
-	token, err := c.TokenManager.GenerateAuthToken(newUser.UUID, newUser.Privileges)
+	token, err := c.TokenManager.GenerateAuthToken(user.UUID, user.Privileges)
 	if err != nil {
 		log.Printf("Failed to generate auth token: %v", err)
 	}
@@ -56,6 +52,6 @@ func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &authCookie)
-	w.Header().Set("Location", "/users/"+newUser.UUID.String())
+	w.Header().Set("Location", "/users/login/"+user.UUID.String())
 	w.WriteHeader(http.StatusCreated)
 }
