@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	userApplication "github.com/literally_user/gozon/internal/application/usecases/manageUser"
+	"github.com/literally_user/gozon/internal/infrastructure/auth"
 	"github.com/literally_user/gozon/internal/presentation/controllers/errors"
 )
 
@@ -18,6 +20,7 @@ type CreateUserRequest struct {
 
 type CreateUserController struct {
 	CreateUserInteractor userApplication.CreateUserInteractor
+	TokenManager         auth.TokenManager
 }
 
 func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
@@ -35,10 +38,24 @@ func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	token, err := c.TokenManager.GenerateAuthToken(newUser.UUID, newUser.Privileges)
+	if err != nil {
+		log.Printf("Failed to generate auth token: %v", err)
+	}
+
+	authCookie := http.Cookie{
+		Name:    "authentication",
+		Value:   token,
+		Path:    "/",
+		Expires: time.Now().Add(24 * time.Hour),
+		MaxAge:  24 * 60 * 60,
+
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	http.SetCookie(w, &authCookie)
 	w.Header().Set("Location", "/users/"+newUser.UUID.String())
 	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(newUser)
-	if err != nil {
-		log.Printf("Error create user: %v", err)
-	}
 }

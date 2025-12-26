@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/google/uuid"
 	userApplication "github.com/literally_user/gozon/internal/application/usecases/manageUser"
 	"github.com/literally_user/gozon/internal/presentation/controllers/errors"
+	"github.com/literally_user/gozon/internal/presentation/middlewares"
 )
 
 type ChangePasswordRequest struct {
-	UserUUID uuid.UUID `json:"uuid"`
-	Password string    `json:"password"`
+	Password string `json:"password"`
 }
 
 type ChangePasswordController struct {
@@ -27,7 +26,13 @@ func (c *ChangePasswordController) Execute(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	err := c.ChangePasswordInteractor.Execute(req.UserUUID, req.Password)
+	user, ok := r.Context().Value(middlewares.UserContextKey).(middlewares.UserContext)
+	if !ok {
+		errors.WriteError(w, r, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	err := c.ChangePasswordInteractor.Execute(user.UserUUID, req.Password)
 	if err != nil {
 		errors.WriteError(w, r, http.StatusBadRequest, err.Error())
 		return
