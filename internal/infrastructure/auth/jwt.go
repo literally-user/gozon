@@ -29,7 +29,7 @@ func (g *TokenManager) ParseAuthToken(tokenString string) (uuid.UUID, int, error
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(g.SecretKey), nil
+		return g.SecretKey, nil
 	})
 
 	if err != nil {

@@ -24,5 +24,6 @@ func (c *DeleteUserController) Execute(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Location", "/users/me")
 	w.WriteHeader(http.StatusNoContent)
 }

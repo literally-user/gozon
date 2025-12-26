@@ -62,6 +62,15 @@ func (r *ImMemoryUserRepository) GetByUUID(uuid uuid.UUID) (userDomain.User, err
 	return userDomain.User{}, userApplication.ErrUserNotFound
 }
 
+func (r *ImMemoryUserRepository) GetByUsername(username string) (userDomain.User, error) {
+	for _, val := range r.Storage {
+		if val.Username == username {
+			return val, nil
+		}
+	}
+	return userDomain.User{}, userApplication.ErrUserNotFound
+}
+
 func (r *ImMemoryUserRepository) GetAllUsers() []userDomain.User {
 	return r.Storage
 }

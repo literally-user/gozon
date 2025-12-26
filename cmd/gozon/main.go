@@ -28,7 +28,7 @@ func main() {
 func run(ctx context.Context) {
 	// Config reader
 	var (
-		configReader = config.NewReader("/home/ltu/GolandProjects/gozon/internal/config/config.toml")
+		configReader = config.NewReader("your config path")
 		configData   = configReader.Read()
 	)
 
@@ -60,6 +60,9 @@ func run(ctx context.Context) {
 			Repository: &userRepository,
 			Publisher:  mockPublisher,
 		}
+		getUserInteractor = userApplication.GetUserInteractor{
+			Repository: &userRepository,
+		}
 		deleteUserInteractor = userApplication.DeleteUserInteractor{
 			Repository: &userRepository,
 			Publisher:  mockPublisher,
@@ -84,6 +87,11 @@ func run(ctx context.Context) {
 			CreateUserInteractor: createUserInteractor,
 			TokenManager:         tokenManager,
 		}
+		loginController = userPresentation.LoginController{
+			GetUserInteractor: getUserInteractor,
+			TokenManager:      tokenManager,
+		}
+		logoutController     = userPresentation.LogoutController{}
 		deleteUserController = userPresentation.DeleteUserController{
 			DeleteUserInteractor: deleteUserInteractor,
 		}
@@ -105,10 +113,14 @@ func run(ctx context.Context) {
 	)
 
 	// Register handlers
-	mux.HandleFunc("POST /users/", createUserController.Execute)
-
+	mux.HandleFunc("POST /users/register", createUserController.Execute)
+	mux.HandleFunc("POST /users/login", loginController.Execute)
 	mux.Handle(
-		"DELETE /users/me/",
+		"POST /users/me/logout",
+		authMiddleware.Execute(http.HandlerFunc(logoutController.Execute)),
+	)
+	mux.Handle(
+		"DELETE /users/me",
 		authMiddleware.Execute(http.HandlerFunc(deleteUserController.Execute)),
 	)
 	mux.Handle(

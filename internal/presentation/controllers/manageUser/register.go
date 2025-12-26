@@ -56,5 +56,6 @@ func (c *CreateUserController) Execute(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &authCookie)
+	w.Header().Set("Location", "/users/register")
 	w.WriteHeader(http.StatusCreated)
 }

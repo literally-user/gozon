@@ -8,6 +8,7 @@ import (
 type UserRepository interface {
 	GetAllUsers() []domain.User
 	GetByUUID(uuid uuid.UUID) (domain.User, error)
+	GetByUsername(username string) (domain.User, error)
 	Create(user domain.User) error
 	Update(user domain.User) error
 	Remove(user domain.User) error
