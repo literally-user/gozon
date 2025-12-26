@@ -33,4 +33,4 @@ go.work.sum
 
 # Config
 
-*.toml
+config.toml

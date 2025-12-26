@@ -7,8 +7,9 @@ import (
 )
 
 type API struct {
-	Host string `toml:"host"`
-	Port int    `toml:"port"`
+	Host      string `toml:"host"`
+	Port      int    `toml:"port"`
+	SecretKey string `toml:"secret_key"`
 }
 
 type Config struct {

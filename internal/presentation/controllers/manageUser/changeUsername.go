@@ -4,14 +4,13 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/google/uuid"
 	userApplication "github.com/literally_user/gozon/internal/application/usecases/manageUser"
 	"github.com/literally_user/gozon/internal/presentation/controllers/errors"
+	"github.com/literally_user/gozon/internal/presentation/middlewares"
 )
 
 type ChangeUsernameRequest struct {
-	UserUUID uuid.UUID `json:"uuid"`
-	Username string    `json:"username"`
+	Username string `json:"username"`
 }
 
 type ChangeUsernameController struct {
@@ -27,7 +26,13 @@ func (c *ChangeUsernameController) Execute(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	err := c.ChangeUsernameInteractor.Execute(req.UserUUID, req.Username)
+	user, ok := r.Context().Value(middlewares.UserContextKey).(middlewares.UserContext)
+	if !ok {
+		errors.WriteError(w, r, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	err := c.ChangeUsernameInteractor.Execute(user.UserUUID, req.Username)
 	if err != nil {
 		errors.WriteError(w, r, http.StatusBadRequest, err.Error())
 		return
