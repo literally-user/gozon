@@ -20,15 +20,15 @@ type ChangeTelephoneController struct {
 func (c *ChangeTelephoneController) Execute(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close() //nolint:errcheck
 
-	var req ChangeTelephoneRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		errors.WriteError(w, r, http.StatusBadRequest, "Invalid json body")
-		return
-	}
-
 	user, ok := r.Context().Value(middlewares.UserContextKey).(middlewares.UserContext)
 	if !ok {
 		errors.WriteError(w, r, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	var req ChangeTelephoneRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		errors.WriteError(w, r, http.StatusBadRequest, "Invalid json body")
 		return
 	}
 
